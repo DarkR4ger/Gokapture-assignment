@@ -15,11 +15,8 @@ import { FormEvent, useState } from "react";
 import { toast } from "sonner";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
+import { ResponseJsonData } from "@/global/authtype";
 
-interface ResponseJsonData {
-  success: boolean;
-  message: string;
-}
 
 const RegisterPage = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -56,7 +53,9 @@ const RegisterPage = () => {
       <Card className="lg:w-[30%] shadow-xl">
         <CardHeader>
           <CardTitle>Register</CardTitle>
-          <CardDescription>Register to make your own task management</CardDescription>
+          <CardDescription>
+            Register to make your own task management
+          </CardDescription>
         </CardHeader>
         <form onSubmit={onFormSubmit}>
           <CardContent className="grid items-center gap-y-4">
@@ -94,7 +93,7 @@ const RegisterPage = () => {
             </div>
           </CardContent>
           <CardFooter className="grid items-center gap-y-4">
-            <p className="text-center">
+            <p className="text-center text-sm">
               Already have an account&#63; Please{" "}
               <Link className="text-blue-600" href="/login">
                 login

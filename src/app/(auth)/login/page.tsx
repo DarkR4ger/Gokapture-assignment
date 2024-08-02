@@ -16,11 +16,8 @@ import { toast } from "sonner";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { ResponseJsonData } from "@/global/authtype";
 
-export interface ResponseJsonData {
-  success: boolean;
-  message: string;
-}
 
 const LoginPage = () => {
   const router = useRouter();
@@ -88,7 +85,7 @@ const LoginPage = () => {
             </div>
           </CardContent>
           <CardFooter className="grid items-center gap-y-4">
-            <p className="text-center">
+            <p className="text-center text-sm">
               Don&apos;t have an account&#63; Please{" "}
               <Link className="text-blue-600" href="/register">
                 register

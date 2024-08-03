@@ -24,17 +24,19 @@ import { FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { ResponseJsonData } from "@/global/authtype";
 import { Loader2 } from "lucide-react";
+import { UserData } from "@/global/dbtypes";
 
 export default function TaskDialog({ id }: { id: number }) {
   const [minDate, setMinDate] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [users, setUsers] = useState<UserData[] | null>(null);
 
   const handleFormSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const toastId = toast.loading("Adding task...");
     setIsLoading(true);
     const formData = new FormData(e.currentTarget);
-    console.log(formData)
+    console.log(formData);
     try {
       const res = await fetch("/api/task", {
         method: "POST",
@@ -52,7 +54,7 @@ export default function TaskDialog({ id }: { id: number }) {
       }
       setIsLoading(false);
     } catch (err) {
-      console.log((err as Error).message)
+      console.log((err as Error).message);
       toast.error("please try again" as string, {
         id: toastId,
       });
@@ -60,10 +62,23 @@ export default function TaskDialog({ id }: { id: number }) {
     }
   };
 
+  const getUserData = async () => {
+    try {
+      const res = await fetch("/api/user");
+      const json = await res.json();
+      const data: UserData[] = json.body;
+      setUsers(data);
+    } catch (err) {
+      console.log((err as Error).message);
+    }
+  };
+
   useEffect(() => {
     const today = new Date().toISOString().split("T")[0];
     setMinDate(today);
+    getUserData();
   }, []);
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -127,9 +142,39 @@ export default function TaskDialog({ id }: { id: number }) {
             </div>
             <div className="grid gap-y-2 items-center">
               <Label htmlFor="priority">Priority</Label>
-              <Input type="checkbox" id="priority" name="priority" className="size-5" />
+              <Input
+                type="checkbox"
+                id="priority"
+                name="priority"
+                className="size-5"
+              />
             </div>
-            <input type="hidden" value={id} name="userId"/>
+            <div className="grid gap-y-2 items-center">
+              <Label htmlFor="task-user">Select Status</Label>
+              <Select name="userId" required>
+                <SelectTrigger className="" id="task-user">
+                  <SelectValue placeholder="Select a user.." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectGroup>
+                    <SelectLabel>Users</SelectLabel>
+                    {users &&
+                      users.map((user, index) => {
+                        return (
+                          <div
+                              key={index}
+                            >
+                            <SelectItem
+                              value={user.id.toString()}
+                                className="capitalize"
+                            >{user.username}</SelectItem>
+                          </div>
+                        );
+                      })}
+                  </SelectGroup>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
           <DialogFooter>
             <Button

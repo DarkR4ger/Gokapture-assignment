@@ -13,6 +13,7 @@ export async function POST(req: NextRequest) {
   } else {
     body.priority = false;
   }
+  console.log(body.userId)
   body.userId = parseInt(body.userId);
   const data: TaskData = body;
   try {

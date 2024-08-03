@@ -16,7 +16,6 @@ import { IFilterText } from "./Dashboard";
 export default function SearchComp({
   id,
   searchText,
-  filters,
   handleSearch,
   handleFormSubmit,
   handleClearFilter,

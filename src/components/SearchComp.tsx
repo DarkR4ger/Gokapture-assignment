@@ -9,8 +9,25 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import TaskDialog from "./TaskDialog";
+import { ChangeEvent, FormEvent, MouseEvent } from "react";
+import { Button } from "./ui/button";
+import { IFilterText } from "./Dashboard";
 
-export default function SearchComp({id}: {id: number}) {
+export default function SearchComp({
+  id,
+  searchText,
+  filters,
+  handleSearch,
+  handleFormSubmit,
+  handleClearFilter,
+}: {
+  id: number;
+  searchText: string;
+  filters: IFilterText;
+  handleSearch: (e: ChangeEvent<HTMLInputElement>) => void;
+  handleFormSubmit: (e: FormEvent<HTMLFormElement>) => void;
+  handleClearFilter: () => void;
+}) {
   return (
     <div>
       <div className="grid gap-2">
@@ -20,8 +37,8 @@ export default function SearchComp({id}: {id: number}) {
         <div className="flex md:flex-row w-full flex-col md:w-[50%] md:items-center gap-4">
           <div className="flex items-center justify-between w-full">
             <Input
-              // value=''
-              // onChange={(e) => setSearchText(e.target.value)}
+              value={searchText}
+              onChange={handleSearch}
               id="movie"
               type="search"
               placeholder="Search for movies..."
@@ -34,10 +51,13 @@ export default function SearchComp({id}: {id: number}) {
       </div>
       <div className="grid gap-2 mt-5 w-full">
         <h2>Filters</h2>
-        <div className="flex md:flex-row flex-col md:items-center gap-4 w-full">
+        <form
+          onSubmit={handleFormSubmit}
+          className="flex md:flex-row flex-col md:items-center gap-4 w-full"
+        >
           <div className="flex items-center gap-4">
             <Label htmlFor="status">Status</Label>
-            <Select>
+            <Select name="status">
               <SelectTrigger id="status" className="w-full">
                 <SelectValue placeholder="Status" />
               </SelectTrigger>
@@ -50,22 +70,20 @@ export default function SearchComp({id}: {id: number}) {
           </div>
           <div className="flex items-center gap-4">
             <Label htmlFor="priority">Priority</Label>
-            <Input type="checkbox" id="priority" className="size-5" />
+            <Input
+              type="checkbox"
+              id="priority"
+              name="priority"
+              className="size-5"
+            />
           </div>
           <div className="flex items-center gap-4">
             <Label htmlFor="duedate">Duedate</Label>
-            <Select name="dueDate">
-              <SelectTrigger id="duedata" className="w-full">
-                <SelectValue placeholder="DueDate" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="todo">Todo</SelectItem>
-                <SelectItem value="in-progress">In-progress</SelectItem>
-                <SelectItem value="done">Done</SelectItem>
-              </SelectContent>
-            </Select>
+            <Input type="date" id="duedate" name="duedate" />
           </div>
-        </div>
+          <Button type="submit">Filter</Button>
+          <Button type="button" onClick={handleClearFilter}>Clear Filter</Button>
+        </form>
       </div>
     </div>
   );

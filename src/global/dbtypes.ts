@@ -15,4 +15,5 @@ export interface TaskFullData {
   createdAt: string;
   updatedAt: string;
   userId: number;
+  user: UserData
 }

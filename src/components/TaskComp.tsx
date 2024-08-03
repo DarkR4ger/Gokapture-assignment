@@ -8,15 +8,6 @@ import {
   CardContent,
   CardFooter,
 } from "./ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import EditTaskDialog from "./EditTask";
 import ViewTaskDialog from "./ViewTaskDialog";
@@ -35,7 +26,7 @@ export function TaskCard({ task }: { task: TaskFullData }) {
     <Card>
       <CardHeader>
         <CardTitle>{task.title}</CardTitle>
-        <CardDescription>Task</CardDescription>
+        <CardDescription className="capitalize">{task.user.username}</CardDescription>
       </CardHeader>
       <CardContent className="flex flex-wrap gap-2 items-center">
         <div
@@ -47,6 +38,8 @@ export function TaskCard({ task }: { task: TaskFullData }) {
         <ViewTaskDialog task={task} />
         <DeleteTaskDialog task={task} />
       </CardContent>
+      <CardFooter>
+        </CardFooter>
     </Card>
   );
 }

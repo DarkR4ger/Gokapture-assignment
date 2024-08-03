@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import {  useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback } from "./ui/avatar";
 import {
   DropdownMenu,
@@ -11,7 +11,7 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
 } from "./ui/dropdown-menu";
-import { Loader2, LogOut, User } from "lucide-react";
+import { Loader2, LogOut } from "lucide-react";
 import { logout } from "@/lib/logout";
 import { UserData } from "@/global/dbtypes";
 
@@ -25,12 +25,13 @@ const HeaderComp = ({ data }: { data: UserData }) => {
 
   return (
     <nav className="container shadow-xl py-4 flex items-center justify-between">
-      <div>
+      <div className="flex items-center gap-4">
         <Link href="/">
           <h1 className="text-md md:text-xl lg:text-2xl font-semibold">
             TaskMan
           </h1>
         </Link>
+        {user.isAdmin && <div className="bg-red-500/30 w-fit px-3 py-1 rounded-xl text-red-500 font-semibold">Admin</div>}
       </div>
       <div>
         <DropdownMenu>
@@ -53,15 +54,6 @@ const HeaderComp = ({ data }: { data: UserData }) => {
             <DropdownMenuLabel>My Account</DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <Link
-                  href={`${user?.isAdmin ? "/admin" : "/profile"}`}
-                  className="flex items-center"
-                >
-                  <User className="size-4 mr-2" />
-                  <p>{user?.isAdmin ? "Admin" : "Profile"}</p>
-                </Link>
-              </DropdownMenuItem>
               <DropdownMenuItem onClick={handleLogOut}>
                 <LogOut className="size-4 mr-2 stroke-primary" />
                 <span className="text-primary">Log out</span>

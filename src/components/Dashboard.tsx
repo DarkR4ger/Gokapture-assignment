@@ -4,12 +4,15 @@ import SearchComp from "./SearchComp";
 import { ChangeEvent, FormEvent, MouseEvent, useEffect, useState } from "react";
 import TaskComp from "./TaskComp";
 import LoaderSpinner from "./LoadingSpinner";
+import { Button } from "./ui/button";
 
 export interface IFilterText {
   status: string;
   priority: boolean;
   duedate: string;
 }
+
+const ITEMS_PER_PAGE = 5
 
 export default function Dashboard({ data }: { data: UserData }) {
   const { id } = data;
@@ -24,6 +27,7 @@ export default function Dashboard({ data }: { data: UserData }) {
     duedate: ''
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
 
   const getUserData = async () => {
     setIsLoading(true);
@@ -74,6 +78,10 @@ export default function Dashboard({ data }: { data: UserData }) {
     });
   };
 
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+  };
+
   useEffect(() => {
     getUserData();
   }, []);
@@ -105,8 +113,15 @@ export default function Dashboard({ data }: { data: UserData }) {
       }
 
       setFilteredTask(filteredData);
+      setCurrentPage(1)
     }
   }, [task, searchText, filters]);
+
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const paginatedTasks = filteredtask?.slice(startIndex, startIndex + ITEMS_PER_PAGE) || [];
+
+  const totalPages = Math.ceil((filteredtask?.length || 0) / ITEMS_PER_PAGE);
+
 
   return (
     <div>
@@ -120,13 +135,24 @@ export default function Dashboard({ data }: { data: UserData }) {
       />
       <div className="grid items-center mt-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {task?.length === 0 && <div>Add task to show here</div>}
-        {!isLoading && filteredtask ? (
-          filteredtask.map((t, index) => {
+        {!isLoading && paginatedTasks ? (
+          paginatedTasks.map((t, index) => {
             return <TaskComp key={index} task={t} />;
           })
         ) : (
           <LoaderSpinner />
         )}
+      </div>
+       <div className="mt-5 flex gap-4 items-center justify-center">
+        <Button onClick={() => handlePageChange(currentPage - 1)} disabled={currentPage === 1}>
+          Previous
+        </Button>
+        <div className="px-2 py-1 rounded-md bg-black text-white">
+          {currentPage} of {totalPages}
+        </div>
+        <Button onClick={() => handlePageChange(currentPage + 1)} disabled={currentPage === totalPages}>
+          Next
+        </Button>
       </div>
     </div>
   );

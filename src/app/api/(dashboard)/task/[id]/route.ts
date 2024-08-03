@@ -9,11 +9,28 @@ export async function GET(
 ) {
   const id = params.id;
   try {
-    const res = await prisma.task.findMany({
+    const user = await prisma.user.findUnique({
       where: {
-        userId: parseInt(id),
+        id: parseInt(id),
       },
     });
+    let res;
+    if (user?.isAdmin) {
+      res = await prisma.task.findMany({
+        include: {
+          user: true
+        }
+      });
+    } else {
+      res = await prisma.task.findMany({
+        where: {
+          userId: parseInt(id),
+        },
+        include: {
+          user: true
+        }
+      });
+    }
     return NextResponse.json({
       success: true,
       message: `${id} retirevied`,

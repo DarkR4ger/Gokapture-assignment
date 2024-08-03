@@ -11,6 +11,7 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_DATABASE_URL")
 }
 
 model User {
@@ -28,7 +29,7 @@ model Task {
   description String
   status      String   @default("todo")
   priority    Boolean  @default(false)
-  dueDate     DateTime
+  dueDate     String
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   user        User     @relation(fields: [userId], references: [id])

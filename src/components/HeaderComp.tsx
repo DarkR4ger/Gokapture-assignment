@@ -28,7 +28,7 @@ const HeaderComp = ({ data }: { data: UserData }) => {
       <div>
         <Link href="/">
           <h1 className="text-md md:text-xl lg:text-2xl font-semibold">
-            Book<span className="text-primary">My</span>ShowC
+            TaskMan
           </h1>
         </Link>
       </div>

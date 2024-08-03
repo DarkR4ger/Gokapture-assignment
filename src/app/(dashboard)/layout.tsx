@@ -10,7 +10,7 @@ export default async function DashboardLayout({
   return (
     <main className="container">
       <HeaderComp data={data} />
-      {children}
+      <div className="mt-5 shadow-2xl pt-5 pb-5 min-h-screen">{children}</div>
     </main>
   );
 }
